@@ -1,0 +1,35 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="az">
+<head>
+    <meta charset="UTF-8">
+    <title>Nəticə</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+<script>
+    confetti({
+        particleCount: 180,
+        spread: 90,
+        origin: { y: 0.6 }
+    });
+</script>
+<body>
+
+<div class="profile-box">
+
+    <h1>🎉 Battle Nəticəsi</h1>
+
+    <h2>Doğru cavab: {{ score }} / {{ total }}</h2>
+    <h2>⭐ Qazanılan XP: {{ earned_xp }}</h2>
+    <h2>🪙 Qazanılan Coin: {{ earned_coin }}</h2>
+    <h2>❤️ Qalan can: {{ lives }}</h2>
+
+    <a href="{% url 'home' %}" class="main-btn">Ana səhifə</a>
+    <a href="{% url 'leaderboard' %}" class="main-btn">Leaderboard</a>
+
+</div>
+
+</body>
+</html>

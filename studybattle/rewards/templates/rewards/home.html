@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="az">
+<head>
+    <meta charset="UTF-8">
+    <title>Rewards</title>
+</head>
+<body>
+
+<h1>🏆 Rewards</h1>
+
+{% for reward in rewards %}
+
+<div>
+    <h2>{{ reward.icon }} {{ reward.title }}</h2>
+    <p>{{ reward.description }}</p>
+</div>
+
+{% endfor %}
+
+</body>
+</html>

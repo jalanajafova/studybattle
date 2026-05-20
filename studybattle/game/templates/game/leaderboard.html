@@ -1,0 +1,78 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="az">
+<head>
+    <meta charset="UTF-8">
+    <title>Leaderboard</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+
+<nav class="navbar">
+    <div class="brand">
+        <div class="logo-icon">S</div>
+        <div>
+            <h2>StudyBattle</h2>
+            <p>Oxu və Qalib Gəl!</p>
+        </div>
+    </div>
+
+    <div class="nav-links">
+        <a href="{% url 'home' %}">Ana Səhifə</a>
+    </div>
+</nav>
+
+<section class="leaderboard-page">
+    <h1>🏆 Leaderboard</h1>
+    <p>Ən güclü oyunçular burada!</p>
+
+    <div class="top-players">
+        <div class="top-card second">
+            <span>🥈</span>
+            <h3>2-ci yer</h3>
+        </div>
+
+        <div class="top-card first">
+            <span>🥇</span>
+            <h3>1-ci yer</h3>
+        </div>
+
+        <div class="top-card third">
+            <span>🥉</span>
+            <h3>3-cü yer</h3>
+        </div>
+    </div>
+
+    <table class="leader-table">
+        <tr>
+            <th>#</th>
+            <th>İstifadəçi</th>
+            <th>Fənn</th>
+            <th>Xal</th>
+            <th>Tarix</th>
+        </tr>
+
+        {% for result in results %}
+        <tr>
+            <td>{{ forloop.counter }}</td>
+            <td>{{ result.player.username }}</td>
+            <td>{{ result.subject.name }}</td>
+            <td>{{ result.score }} XP</td>
+            <td>{{ result.created_at|date:"d.m.Y H:i" }}</td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="5">Hələ nəticə yoxdur.</td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <div class="bottom-cta">
+        <h2>Sən də lider ola bilərsən!</h2>
+        <p>Battle-a qoşul, xalını artır və liderlər sırasına adını yazdır.</p>
+        <a href="{% url 'home' %}">⚡ Battle Başlat</a>
+    </div>
+</section>
+
+</body>
+</html>

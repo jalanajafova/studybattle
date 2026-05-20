@@ -1,0 +1,337 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="az">
+<head>
+    <meta charset="UTF-8">
+    <title>AI Quiz Generator</title>
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800;900&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            background:
+                radial-gradient(circle at top left, rgba(34,197,94,0.22), transparent 32%),
+                radial-gradient(circle at bottom right, rgba(139,92,246,0.22), transparent 35%),
+                #050b1d;
+            color: white;
+        }
+
+        .generator-page {
+            width: 92%;
+            margin: 45px auto;
+        }
+
+        .generator-hero {
+            min-height: 700px;
+            padding: 60px;
+            border-radius: 38px;
+            background: rgba(255,255,255,0.065);
+            border: 1px solid rgba(255,255,255,0.13);
+            box-shadow: 0 30px 90px rgba(0,0,0,0.45);
+            display: grid;
+            grid-template-columns: 1fr 460px;
+            gap: 60px;
+            align-items: center;
+        }
+
+        .generator-badge {
+            display: inline-block;
+            padding: 13px 22px;
+            border-radius: 999px;
+            background: rgba(34,197,94,0.14);
+            border: 1px solid rgba(34,197,94,0.35);
+            color: #22c55e;
+            font-weight: 800;
+            margin-bottom: 28px;
+        }
+
+        .generator-left h1 {
+            font-size: 72px;
+            line-height: 1;
+            margin-bottom: 25px;
+        }
+
+        .generator-left p {
+            color: #cbd5e1;
+            font-size: 22px;
+            line-height: 1.7;
+            max-width: 650px;
+        }
+
+        .generator-features {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+            margin: 35px 0;
+        }
+
+        .feature-card {
+            padding: 22px;
+            border-radius: 24px;
+            background: rgba(15,23,42,0.85);
+            border: 1px solid rgba(255,255,255,0.1);
+            font-weight: 800;
+            transition: 0.3s;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-6px);
+            border-color: #22c55e;
+            box-shadow: 0 0 30px rgba(34,197,94,0.2);
+        }
+
+        .back-home {
+            display: inline-block;
+            padding: 16px 32px;
+            border-radius: 18px;
+            background: rgba(255,255,255,0.08);
+            color: white;
+            text-decoration: none;
+            font-weight: 800;
+            border: 1px solid rgba(255,255,255,0.14);
+        }
+
+        .generator-card {
+            padding: 36px;
+            border-radius: 34px;
+            background: rgba(15,23,42,0.95);
+            border: 1px solid rgba(34,197,94,0.28);
+            box-shadow: 0 0 70px rgba(34,197,94,0.22);
+        }
+
+        .card-top {
+            display: flex;
+            gap: 18px;
+            align-items: center;
+            margin-bottom: 32px;
+        }
+
+        .ai-circle {
+            width: 78px;
+            height: 78px;
+            border-radius: 24px;
+            background: linear-gradient(135deg, #22c55e, #8b5cf6);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 38px;
+            box-shadow: 0 0 32px rgba(34,197,94,0.35);
+        }
+
+        .card-top h2 {
+            font-size: 30px;
+        }
+
+        .card-top p {
+            color: #94a3b8;
+            margin-top: 5px;
+        }
+
+        label {
+            display: block;
+            margin: 16px 0 9px;
+            color: #cbd5e1;
+            font-weight: 700;
+        }
+
+        input,
+        select {
+            width: 100%;
+            height: 60px;
+            border-radius: 18px;
+            border: 1px solid rgba(255,255,255,0.12);
+            background: #020817;
+            color: white;
+            padding: 0 18px;
+            font-size: 16px;
+            outline: none;
+        }
+
+        input:focus,
+        select:focus {
+            border-color: #22c55e;
+            box-shadow: 0 0 22px rgba(34,197,94,0.18);
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
+        }
+
+        .generate-btn {
+            width: 100%;
+            height: 64px;
+            margin-top: 28px;
+            border: none;
+            border-radius: 20px;
+            background: linear-gradient(135deg, #22c55e, #16a34a);
+            color: white;
+            font-size: 19px;
+            font-weight: 900;
+            cursor: pointer;
+            box-shadow: 0 15px 38px rgba(34,197,94,0.32);
+            transition: 0.3s;
+        }
+
+        .generate-btn:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 22px 48px rgba(34,197,94,0.45);
+        }
+
+        .mini-info {
+            margin-top: 22px;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+        }
+
+        .mini-info div {
+            padding: 14px;
+            border-radius: 16px;
+            background: rgba(255,255,255,0.06);
+            text-align: center;
+            color: #cbd5e1;
+            font-size: 14px;
+        }
+
+        @media(max-width: 1050px) {
+            .generator-hero {
+                grid-template-columns: 1fr;
+            }
+
+            .generator-left h1 {
+                font-size: 52px;
+            }
+
+            .generator-features {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media(max-width: 600px) {
+            .generator-hero {
+                padding: 28px;
+            }
+
+            .form-row,
+            .mini-info {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<section class="generator-page">
+
+    <div class="generator-hero">
+
+        <div class="generator-left">
+            <span class="generator-badge">✨ AI Powered Quiz</span>
+
+            <h1>AI Quiz Generator</h1>
+
+            <p>
+                Mövzunu yaz, fənni və çətinliyi seç.
+                Sistem avtomatik olaraq sənin üçün quiz sualları hazırlasın.
+            </p>
+
+            <div class="generator-features">
+                <div class="feature-card">⚡ Sürətli sual yaratma</div>
+                <div class="feature-card">🎯 Easy / Medium / Hard</div>
+                <div class="feature-card">📚 Fənnə uyğun testlər</div>
+            </div>
+
+            <a href="{% url 'home' %}" class="back-home">
+                Ana səhifə
+            </a>
+        </div>
+
+
+        <div class="generator-card">
+
+            <div class="card-top">
+                <div class="ai-circle">🤖</div>
+
+                <div>
+                    <h2>Yeni Quiz yarat</h2>
+                    <p>AI mövzuya uyğun suallar hazırlayacaq</p>
+                </div>
+            </div>
+
+            <form method="POST">
+                {% csrf_token %}
+
+                <label>Mövzu</label>
+                <input
+                    type="text"
+                    name="topic"
+                    placeholder="Məsələn: Python loops"
+                    required
+                >
+
+                <div class="form-row">
+                    <div>
+                        <label>Fənn</label>
+                        <select name="subject">
+
+    {% for subject in subjects %}
+
+        <option value="{{ subject.id }}">
+            {{ subject.name }}
+        </option>
+
+    {% endfor %}
+
+</select>
+                    </div>
+
+                    <div>
+                        <label>Çətinlik</label>
+                        <select name="difficulty">
+                            <option value="Easy">Easy</option>
+                            <option value="Medium">Medium</option>
+                            <option value="Hard">Hard</option>
+                        </select>
+                    </div>
+                </div>
+
+                <button type="submit" class="generate-btn">
+                    ✨ Sual yarat
+                </button>
+            </form>
+{% if created_question %}
+<div style="margin-top:25px; padding:20px; border-radius:18px; background:rgba(34,197,94,0.12); border:1px solid #22c55e;">
+    <h3>✅ Sual yaradıldı!</h3>
+    <p><b>Sual:</b> {{ created_question.question }}</p>
+    <p>A) {{ created_question.option_a }}</p>
+    <p>B) {{ created_question.option_b }}</p>
+    <p>C) {{ created_question.option_c }}</p>
+    <p>D) {{ created_question.option_d }}</p>
+</div>
+{% endif %}
+
+            <div class="mini-info">
+                <div>5+ sual</div>
+                <div>AI analiz</div>
+                <div>Quiz format</div>
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+</body>
+</html>

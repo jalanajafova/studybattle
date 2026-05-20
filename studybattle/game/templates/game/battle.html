@@ -1,0 +1,271 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="az">
+<head>
+    <meta charset="UTF-8">
+    <title>Battle</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+
+    <style>
+        body {
+            background: #020617;
+            color: white;
+            font-family: Arial, sans-serif;
+        }
+
+        .battle-container {
+            width: 85%;
+            margin: 40px auto;
+            background: #0f172a;
+            padding: 35px;
+            border-radius: 28px;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .battle-top {
+            display: flex;
+            justify-content: space-between;
+            gap: 20px;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .score-box {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .score-card {
+            background: #111827;
+            padding: 16px 22px;
+            border-radius: 18px;
+            border: 1px solid rgba(255,255,255,0.1);
+            font-weight: bold;
+        }
+
+        .score-card span {
+            color: #22c55e;
+            font-size: 24px;
+        }
+
+        .timer {
+            font-size: 26px;
+            color: #22c55e;
+            font-weight: bold;
+        }
+
+        .question-card {
+            background: #111827;
+            padding: 25px;
+            border-radius: 22px;
+            margin-bottom: 25px;
+        }
+
+        .question-card h2 {
+            margin-top: 0;
+        }
+
+        .answer-option {
+            display: block;
+            margin: 12px 0;
+            padding: 16px;
+            border-radius: 16px;
+            background: #1e293b;
+            border: 2px solid transparent;
+            cursor: pointer;
+        }
+
+        .answer-option:hover {
+            border-color: #22c55e;
+        }
+
+        .answer-option.correct {
+            background: rgba(34,197,94,0.18);
+            border-color: #22c55e;
+        }
+
+        .answer-option.wrong {
+            background: rgba(239,68,68,0.18);
+            border-color: #ef4444;
+        }
+
+        .answer-option input {
+            margin-right: 10px;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 18px;
+            border: none;
+            border-radius: 18px;
+            background: linear-gradient(90deg, #22c55e, #16a34a);
+            color: white;
+            font-size: 20px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<audio id="correctSound" src="{% static 'sounds/correct.mp3' %}"></audio>
+<audio id="wrongSound" src="{% static 'sounds/wrong.mp3' %}"></audio>
+
+<script>
+    const correctSound = document.getElementById("correctSound");
+    const wrongSound = document.getElementById("wrongSound");
+
+    document.querySelectorAll(".answer-option").forEach(option => {
+        option.addEventListener("click", function () {
+            if (this.classList.contains("correct")) {
+                correctSound.play();
+            }
+
+            if (this.classList.contains("wrong")) {
+                wrongSound.play();
+            }
+        });
+    });
+</script>
+<body>
+
+<div class="battle-container">
+
+    <a href="{% url 'home' %}" style="color:#22c55e;">← Ana səhifə</a>
+
+    <div class="battle-top">
+        <div>
+            <h1>{{ subject.name }} Battle</h1>
+            <p>Difficulty: {{ difficulty }}</p>
+        </div>
+
+        <div class="score-box">
+            <div class="score-card">⭐ XP: <span id="liveXP">0</span></div>
+            <div class="score-card">✅ Düzgün: <span id="liveCorrect">0</span></div>
+            <div class="score-card">❌ Səhv: <span id="liveWrong">0</span></div>
+            <div class="score-card timer">⏱ <span id="time">60</span>s</div>
+        </div>
+    </div>
+
+    <form method="POST" id="battleForm">
+        {% csrf_token %}
+
+        {% for question in questions %}
+        <div class="question-card">
+            <h2>{{ forloop.counter }}. {{ question.question }}</h2>
+
+            <label class="answer-option"
+                   data-correct="{{ question.correct_answer }}"
+                   data-value="A"
+                   data-xp="{{ question.xp_reward }}">
+                <input type="radio" name="{{ question.id }}" value="A">
+                A) {{ question.option_a }}
+            </label>
+
+            <label class="answer-option"
+                   data-correct="{{ question.correct_answer }}"
+                   data-value="B"
+                   data-xp="{{ question.xp_reward }}">
+                <input type="radio" name="{{ question.id }}" value="B">
+                B) {{ question.option_b }}
+            </label>
+
+            <label class="answer-option"
+                   data-correct="{{ question.correct_answer }}"
+                   data-value="C"
+                   data-xp="{{ question.xp_reward }}">
+                <input type="radio" name="{{ question.id }}" value="C">
+                C) {{ question.option_c }}
+            </label>
+
+            <label class="answer-option"
+                   data-correct="{{ question.correct_answer }}"
+                   data-value="D"
+                   data-xp="{{ question.xp_reward }}">
+                <input type="radio" name="{{ question.id }}" value="D">
+                D) {{ question.option_d }}
+            </label>
+        </div>
+        {% endfor %}
+
+        <button class="submit-btn" type="submit">
+            Battle Bitir 🚀
+        </button>
+    </form>
+
+</div>
+
+<script>
+    let liveXP = 0;
+    let liveCorrect = 0;
+    let liveWrong = 0;
+    let answeredQuestions = new Set();
+
+    const xpBox = document.getElementById("liveXP");
+    const correctBox = document.getElementById("liveCorrect");
+    const wrongBox = document.getElementById("liveWrong");
+
+    const options = document.querySelectorAll(".answer-option");
+
+    options.forEach(option => {
+        option.addEventListener("click", function () {
+            const input = this.querySelector("input");
+            const questionName = input.name;
+
+            if (answeredQuestions.has(questionName)) {
+                return;
+            }
+
+            answeredQuestions.add(questionName);
+
+            const selected = this.dataset.value;
+            const correct = this.dataset.correct;
+            const xp = parseInt(this.dataset.xp);
+
+            const sameQuestionOptions = document.querySelectorAll(
+                'input[name="' + questionName + '"]'
+            );
+
+            sameQuestionOptions.forEach(item => {
+                item.closest(".answer-option").style.pointerEvents = "none";
+
+                if (item.value === correct) {
+                    item.closest(".answer-option").classList.add("correct");
+                }
+            });
+
+            if (selected === correct) {
+                liveXP += xp;
+                liveCorrect += 1;
+                this.classList.add("correct");
+            } else {
+                liveWrong += 1;
+                this.classList.add("wrong");
+            }
+
+            xpBox.innerText = liveXP;
+            correctBox.innerText = liveCorrect;
+            wrongBox.innerText = liveWrong;
+        });
+    });
+
+    let time = 60;
+    let timer = document.getElementById("time");
+    let form = document.getElementById("battleForm");
+
+    let interval = setInterval(function () {
+        time--;
+        timer.innerText = time;
+
+        if (time <= 10) {
+            timer.style.color = "#ef4444";
+        }
+
+        if (time <= 0) {
+            clearInterval(interval);
+            form.submit();
+        }
+    }, 1000);
+</script>
+
+</body>
+</html>

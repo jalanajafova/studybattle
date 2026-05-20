@@ -1,0 +1,293 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="az">
+<head>
+    <meta charset="UTF-8">
+    <title>StudyBattle Shop</title>
+
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Poppins', Arial, sans-serif;
+            background:
+                radial-gradient(circle at top left, rgba(34,197,94,0.20), transparent 30%),
+                radial-gradient(circle at bottom right, rgba(139,92,246,0.20), transparent 35%),
+                #050b1d;
+            color: white;
+        }
+
+        .shop-page {
+            width: 88%;
+            margin: 55px auto;
+        }
+
+        .shop-hero {
+            padding: 55px;
+            border-radius: 36px;
+            background:
+                linear-gradient(135deg, rgba(255,255,255,0.10), rgba(255,255,255,0.03));
+            border: 1px solid rgba(255,255,255,0.14);
+            box-shadow: 0 30px 90px rgba(0,0,0,0.45);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .shop-badge {
+            display: inline-block;
+            padding: 12px 20px;
+            border-radius: 999px;
+            background: rgba(34,197,94,0.15);
+            color: #22c55e;
+            font-weight: 800;
+            margin-bottom: 25px;
+        }
+
+        h1 {
+            font-size: 64px;
+            margin: 0;
+        }
+
+        .shop-hero p {
+            color: #cbd5e1;
+            font-size: 21px;
+            margin-top: 18px;
+        }
+
+        .coin-box {
+            display: inline-block;
+            margin: 30px 0;
+            padding: 17px 25px;
+            border-radius: 18px;
+            background: rgba(255,255,255,0.08);
+            border: 1px solid rgba(255,255,255,0.14);
+            font-size: 19px;
+            font-weight: 700;
+        }
+
+        .coin-box strong {
+            color: #facc15;
+        }
+
+        .shop-btn {
+            display: inline-block;
+            padding: 17px 34px;
+            border-radius: 18px;
+            background: linear-gradient(135deg, #22c55e, #16a34a);
+            color: white;
+            text-decoration: none;
+            font-weight: 900;
+            box-shadow: 0 15px 35px rgba(34,197,94,0.35);
+        }
+
+        .shop-icon {
+            width: 230px;
+            height: 230px;
+            border-radius: 50px;
+            background: rgba(34,197,94,0.12);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 115px;
+            box-shadow: 0 0 70px rgba(34,197,94,0.35);
+        }
+
+        .shop-title {
+            margin: 60px 0 25px;
+        }
+
+        .shop-title h2 {
+            font-size: 42px;
+            margin: 0;
+        }
+
+        .shop-title p {
+            color: #cbd5e1;
+            font-size: 18px;
+        }
+
+        .shop-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+            gap: 26px;
+        }
+
+        .shop-card,
+        .empty-box {
+            padding: 32px;
+            border-radius: 30px;
+            background: rgba(255,255,255,0.07);
+            border: 1px solid rgba(255,255,255,0.13);
+            box-shadow: 0 25px 55px rgba(0,0,0,0.35);
+        }
+
+        .item-icon {
+            width: 85px;
+            height: 85px;
+            border-radius: 24px;
+            background: rgba(34,197,94,0.15);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 45px;
+            margin-bottom: 20px;
+        }
+
+        .shop-card h3 {
+            font-size: 27px;
+            margin: 0 0 20px;
+        }
+
+        .item-info {
+            display: flex;
+            justify-content: space-between;
+            padding: 15px 18px;
+            border-radius: 16px;
+            background: #0f172a;
+            margin-bottom: 12px;
+        }
+
+        .item-info span {
+            color: #94a3b8;
+        }
+
+        .buy-btn,
+        .owned-btn {
+            width: 100%;
+            margin-top: 18px;
+            padding: 16px;
+            border-radius: 16px;
+            border: none;
+            display: block;
+            text-align: center;
+            text-decoration: none;
+            font-weight: 900;
+            font-size: 16px;
+        }
+
+        .buy-btn {
+            background: linear-gradient(135deg, #22c55e, #16a34a);
+            color: white;
+        }
+
+        .owned-btn {
+            background: rgba(34,197,94,0.14);
+            color: #22c55e;
+        }
+    </style>
+</head>
+
+<body>
+
+<section class="shop-page">
+
+    <div class="shop-hero">
+        <div>
+            <span class="shop-badge">🛒 Premium Market</span>
+
+            <h1>StudyBattle Shop</h1>
+
+            <p>Coinlərinlə avatar, badge və xüsusi bonuslar əldə et.</p>
+
+            <div class="coin-box">
+                🪙 Coin balansın: <strong>{{ profile.coin }}</strong>
+            </div>
+
+            <br>
+
+            <a href="{% url 'home' %}" class="shop-btn">
+                Ana səhifə
+            </a>
+        </div>
+
+        <div class="shop-icon">
+            🛍️
+        </div>
+    </div>
+
+    <div class="shop-title">
+        <h2>Mağaza məhsulları</h2>
+        <p>İstədiyin item-i seç və coinlə satın al.</p>
+    </div>
+
+    <div class="shop-grid">
+
+        {% for item in items %}
+
+        <div class="shop-card">
+            <div class="item-icon">{{ item.icon }}</div>
+
+            <h3>{{ item.name }}</h3>
+
+            <div class="item-info">
+                <span>Tip</span>
+                <strong>{{ item.item_type }}</strong>
+            </div>
+
+            <div class="item-info">
+                <span>Qiymət</span>
+                <strong>🪙 {{ item.price }}</strong>
+            </div>
+
+            {% if item.id in owned_items %}
+                <button class="owned-btn" disabled>Alınıb ✅</button>
+            {% else %}
+                <a href="{% url 'buy_item' item.id %}" class="buy-btn">
+                    Satın al
+                </a>
+            {% endif %}
+        </div>
+
+        {% empty %}
+
+        <div class="empty-box">
+
+           <div class="empty-shop">
+
+    <div class="empty-icon">🛍️</div>
+
+    <h3>Mağazada hələ məhsul yoxdur</h3>
+
+    <p>
+        Tezliklə avatarlar, badge-lər, XP booster və premium itemlər əlavə olunacaq.
+    </p>
+
+    <div class="coming-items">
+
+        <div>
+            <span>🎖️</span>
+            <p>Badge</p>
+        </div>
+
+        <div>
+            <span>🧑‍🎨</span>
+            <p>Avatar</p>
+        </div>
+
+        <div>
+            <span>⚡</span>
+            <p>XP Booster</p>
+        </div>
+
+        <div>
+            <span>💎</span>
+            <p>Premium</p>
+        </div>
+
+    </div>
+
+    <a href="{% url 'home' %}" class="empty-btn">
+        Battle oyna və coin qazan
+    </a>
+
+</div>
+        </div>
+
+        {% endfor %}
+
+    </div>
+
+</section>
+
+</body>
+</html>

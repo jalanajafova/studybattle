@@ -1,0 +1,103 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="az">
+<head>
+    <meta charset="UTF-8">
+    <title>Profil - StudyBattle</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+
+<nav class="navbar">
+    <div class="brand">
+        <div class="logo-icon">S</div>
+        <div>
+            <h2>StudyBattle</h2>
+            <p>Oxu və Qalib Gəl!</p>
+        </div>
+    </div>
+
+    <div class="nav-links">
+        <a href="{% url 'home' %}">Ana Səhifə</a>
+        <a href="{% url 'leaderboard' %}">🏆 Leaderboard</a>
+        <a href="{% url 'logout' %}">Çıxış</a>
+    </div>
+</nav>
+
+<section class="profile-box">
+
+    <div class="profile-header">
+
+        <div>
+            <h1>{{ request.user.username }}</h1>
+            <p>StudyBattle oyun profili</p>
+        </div>
+
+        <form method="POST" enctype="multipart/form-data" class="avatar-form">
+            {% csrf_token %}
+
+            {% if profile.avatar %}
+                <img src="{{ profile.avatar.url }}" class="profile-avatar">
+            {% else %}
+                <div class="profile-avatar empty-avatar">👤</div>
+            {% endif %}
+
+            <input type="file" name="avatar" id="avatarInput">
+
+            <button type="submit">
+                Avatar yenilə
+            </button>
+        </form>
+
+    </div>
+
+    <div class="stats">
+        <div class="stat-card"><h3>⭐ XP</h3><p>{{ profile.xp }}</p></div>
+        <div class="stat-card"><h3>🪙 Coin</h3><p>{{ profile.coin }}</p></div>
+        <div class="stat-card"><h3>🎯 Level</h3><p>{{ profile.level }}</p></div>
+        <div class="stat-card"><h3>🏆 Rank</h3><p>{{ profile.rank }}</p></div>
+        <div class="stat-card"><h3>🔥 Streak</h3><p>{{ profile.streak }}</p></div>
+        <div class="stat-card"><h3>📊 Accuracy</h3><p>{{ profile.accuracy }}%</p></div>
+        <div class="stat-card"><h3>⚔️ Battles</h3><p>{{ profile.total_battles }}</p></div>
+    </div>
+
+    <h2>Level Progress</h2>
+
+    <div class="progress-bar">
+        <div class="progress-fill" style="width: {{ progress }}%;"></div>
+    </div>
+
+    <p>{{ profile.xp }} XP</p>
+
+    <h2>🏅 Badges</h2>
+
+    <div class="empty-box">
+        {% for badge in badges %}
+            <p>{{ badge.icon }} {{ badge.title }}</p>
+        {% empty %}
+            <p>Hələ badge yoxdur.</p>
+        {% endfor %}
+    </div>
+
+    <h2>📜 Battle History</h2>
+
+    <div class="empty-box">
+        {% for item in history %}
+            <p>
+                {{ item.subject.name }} — {{ item.score }} xal — {{ item.date }}
+            </p>
+        {% empty %}
+            <p>Hələ nəticə yoxdur.</p>
+        {% endfor %}
+    </div>
+
+    <div class="profile-actions">
+        <a href="{% url 'home' %}" class="main-btn">🏠 Ana səhifə</a>
+        <a href="{% url 'leaderboard' %}" class="main-btn secondary">🏆 Leaderboard</a>
+        <a href="{% url 'daily_reward' %}" class="main-btn secondary">🎁 Daily Reward</a>
+    </div>
+
+</section>
+
+</body>
+</html>

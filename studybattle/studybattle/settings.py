@@ -26,10 +26,10 @@ SECRET_KEY = 'django-insecure-r=rvf6)0a@7_#wgbw6veatdlp7wg%8og8xof3vw63(=@%h(g=2
 DEBUG = True
 
 
-ALLOWED_HOSTS = [
-    "127.0.0.1",
-    "localhost",
-    "headstand-armful-unfazed.ngrok-free.dev",
+ALLOWED_HOSTS = ["*"]
+
+CSRF_TRUSTED_ORIGINS = [
+    "https://headstand-armful-unfazed.ngrok-free.dev",
 ]
 CSRF_TRUSTED_ORIGINS = [
     "https://headstand-armful-unfazed.ngrok-free.dev",
